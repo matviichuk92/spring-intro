@@ -14,7 +14,6 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
         "intro.spring.dao",
         "intro.spring.service"
 })
-
 public class AppConfig {
     @Bean
     public DataSource getDataSource() {
