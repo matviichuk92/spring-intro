@@ -1,12 +1,10 @@
 package intro.spring.controller;
 
-import intro.spring.config.AppConfig;
 import intro.spring.dto.UserResponseDto;
 import intro.spring.model.User;
 import intro.spring.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    AnnotationConfigApplicationContext context =
-            new AnnotationConfigApplicationContext(AppConfig.class);
-    UserService userService = context.getBean(UserService.class);
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/inject")
     public String putUsers() {
@@ -29,12 +29,12 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserResponseDto getUserDto(@PathVariable Long userId) {
+    public UserResponseDto getUser(@PathVariable Long userId) {
         return createUserDto(userService.getById(userId));
     }
 
     @GetMapping
-    public List<UserResponseDto> getAllUsersDto() {
+    public List<UserResponseDto> getAllUsers() {
         return userService.listUsers()
                 .stream()
                 .map(this::createUserDto)
